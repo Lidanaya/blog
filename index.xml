@@ -2,35 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>我的博客</title>
-    <link>https://lidanaya.github.io/blog/</link>
+    <link>http://lidanaya.github.io/blog/</link>
     <description>Recent content on 我的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language>
-    <lastBuildDate>Sun, 05 Mar 2023 17:30:46 +0800</lastBuildDate><atom:link href="https://lidanaya.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>First</title>
-      <link>https://lidanaya.github.io/blog/post/first/</link>
-      <pubDate>Sun, 05 Mar 2023 17:30:46 +0800</pubDate>
-      
-      <guid>https://lidanaya.github.io/blog/post/first/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Linux 系统资源配置</title>
-      <link>https://lidanaya.github.io/blog/post/linux-%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE/</link>
-      <pubDate>Sun, 05 Mar 2023 17:30:46 +0800</pubDate>
-      
-      <guid>https://lidanaya.github.io/blog/post/linux-%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE/</guid>
-      <description>系统性能一直是一个受关注的话题。 如何通过最简单的设置来实现最有效的性能调优？ 如何在有限资源的条件下保证程序的运行？ ulimit 是处理这些问题时经常使用的一种简单手段。 ulimit 是 Linux 系统的内置功能，用于限制用户可使用的资源量。它具有一套参数集，可以分别为每个用户设置限制，这些限制适用于该用户运行的每个进程。 注意：ulimit 的配置不会影响系统服务的资源限制。
-一、查看指定进程的 ulimit 首先要知道指定进程的 pid，然后在 pid 目录下查看对应的配置。
-cat /proc/pid/limits 二、ulimit 相关配置 相关的配置有两个：
-配置文件 /etc/security/limits.conf 子目录 /etc/security/limits.d 另外，还有一个 ulimit 命令，用来查看 ulimit 配置，以及临时配置 ulimit。 此外，ulimit 的配置还与内核配置文件 /etc/sysctl.conf 中的某些配置有关，例如：
-fs.file-max fs.nr_open 2.1 limits.conf 工作原理 /etc/security/limits.conf 其实是 pam_limits.so 的配置文件，而 pam_limits.so 是在 /etc/pam.d/ 中被 login 和 sshd 等多个配置文件声明将要被调用的。
-当用户登录系统时，会使用到某个服务程序（比如ssh、login），服务程序将请求发送到 PAM 模块，PAM 模块根据目录 /etc/pam.d/ 下对应的服务程序配置文件进行处理，处理的过程中会调用 pam_***.so 模块，从而使 limits.conf 配置生效。
-**当系统开机启动时，由于没有 PAM 认证的过程，所以 /etc/security/limits.conf 的配置不会生效。 **
-2.2 limits.</description>
-    </item>
-    
+    <language>en-US</language><atom:link href="http://lidanaya.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
