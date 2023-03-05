@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <title>Linux 系统资源配置 // 我的博客</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.110.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Lidanaya" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/blog/css/main.min.3c3c186cd62e563ad6e2f00a89dbee656ab912d1d46f856b5605dd0232521e2a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Linux 系统资源配置"/>
+<meta name="twitter:description" content="系统性能一直是一个受关注的话题。 如何通过最简单的设置来实现最有效的性能调优？ 如何在有限资源的条件下保证程序的运行？ ulimit 是处理这些问题时经常使用的一种简单手段。 ulimit 是 Linux 系统的内置功能，用于限制用户可使用的资源量。它具有一套参数集，可以分别为每个用户设置限制，这些限制适用于该用户运行的每个进程。 注意：ulimit 的配置不会影响系统服务的资源限制。
+一、查看指定进程的 ulimit 首先要知道指定进程的 pid，然后在 pid 目录下查看对应的配置。
+cat /proc/pid/limits 二、ulimit 相关配置 相关的配置有两个：
+配置文件 /etc/security/limits.conf 子目录 /etc/security/limits.d 另外，还有一个 ulimit 命令，用来查看 ulimit 配置，以及临时配置 ulimit。 此外，ulimit 的配置还与内核配置文件 /etc/sysctl.conf 中的某些配置有关，例如：
+fs.file-max fs.nr_open 2.1 limits.conf 工作原理 /etc/security/limits.conf 其实是 pam_limits.so 的配置文件，而 pam_limits.so 是在 /etc/pam.d/ 中被 login 和 sshd 等多个配置文件声明将要被调用的。
+当用户登录系统时，会使用到某个服务程序（比如ssh、login），服务程序将请求发送到 PAM 模块，PAM 模块根据目录 /etc/pam.d/ 下对应的服务程序配置文件进行处理，处理的过程中会调用 pam_***.so 模块，从而使 limits.conf 配置生效。
+**当系统开机启动时，由于没有 PAM 认证的过程，所以 /etc/security/limits.conf 的配置不会生效。 **
+2.2 limits."/>
+
+    <meta property="og:title" content="Linux 系统资源配置" />
+<meta property="og:description" content="系统性能一直是一个受关注的话题。 如何通过最简单的设置来实现最有效的性能调优？ 如何在有限资源的条件下保证程序的运行？ ulimit 是处理这些问题时经常使用的一种简单手段。 ulimit 是 Linux 系统的内置功能，用于限制用户可使用的资源量。它具有一套参数集，可以分别为每个用户设置限制，这些限制适用于该用户运行的每个进程。 注意：ulimit 的配置不会影响系统服务的资源限制。
+一、查看指定进程的 ulimit 首先要知道指定进程的 pid，然后在 pid 目录下查看对应的配置。
+cat /proc/pid/limits 二、ulimit 相关配置 相关的配置有两个：
+配置文件 /etc/security/limits.conf 子目录 /etc/security/limits.d 另外，还有一个 ulimit 命令，用来查看 ulimit 配置，以及临时配置 ulimit。 此外，ulimit 的配置还与内核配置文件 /etc/sysctl.conf 中的某些配置有关，例如：
+fs.file-max fs.nr_open 2.1 limits.conf 工作原理 /etc/security/limits.conf 其实是 pam_limits.so 的配置文件，而 pam_limits.so 是在 /etc/pam.d/ 中被 login 和 sshd 等多个配置文件声明将要被调用的。
+当用户登录系统时，会使用到某个服务程序（比如ssh、login），服务程序将请求发送到 PAM 模块，PAM 模块根据目录 /etc/pam.d/ 下对应的服务程序配置文件进行处理，处理的过程中会调用 pam_***.so 模块，从而使 limits.conf 配置生效。
+**当系统开机启动时，由于没有 PAM 认证的过程，所以 /etc/security/limits.conf 的配置不会生效。 **
+2.2 limits." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lidanaya.github.io/blog/post/linux-%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-03-05T17:30:46+08:00" />
+<meta property="article:modified_time" content="2023-03-05T17:30:46+08:00" />
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://lidanaya.github.io/blog/"><img class="app-header-avatar" src="/blog/avatar.jpg" alt="Lidanaya" /></a>
+      <span class="app-header-title">我的博客</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/blog/">Home</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/blog/post/">归档</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/blog/tags/">标签</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/blog/about/">About</a>
+      </nav>
+      <p>描述文字</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/gohugoio" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>Github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg>
+          </a>
+        
+          <a href="https://twitter.com/gohugoio" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-twitter">
+  <title>Twitter</title>
+  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+</svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Linux 系统资源配置</h1>
+      <div class="post-meta">
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Mar 5, 2023
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          5 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p>系统性能一直是一个受关注的话题。
+如何通过最简单的设置来实现最有效的性能调优？
+如何在有限资源的条件下保证程序的运行？
+ulimit 是处理这些问题时经常使用的一种简单手段。
+ulimit 是 Linux 系统的内置功能，用于限制用户可使用的资源量。它具有一套参数集，可以分别为每个用户设置限制，这些限制适用于该用户运行的每个进程。
+注意：ulimit 的配置不会影响系统服务的资源限制。</p>
+<h2 id="一查看指定进程的-ulimit">一、查看指定进程的 ulimit</h2>
+<p>首先要知道指定进程的 pid，然后在 pid 目录下查看对应的配置。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat /proc/pid/limits
+</span></span></code></pre></div><h2 id="二ulimit-相关配置">二、ulimit 相关配置</h2>
+<p>相关的配置有两个：</p>
+<ul>
+<li>配置文件 /etc/security/limits.conf</li>
+<li>子目录 /etc/security/limits.d</li>
+</ul>
+<p>另外，还有一个 ulimit 命令，用来查看 ulimit 配置，以及临时配置 ulimit。
+此外，ulimit 的配置还与内核配置文件 /etc/sysctl.conf 中的某些配置有关，例如：</p>
+<ul>
+<li>fs.file-max</li>
+<li>fs.nr_open</li>
+</ul>
+<h3 id="21-limitsconf-工作原理">2.1 limits.conf 工作原理</h3>
+<p>/etc/security/limits.conf 其实是 pam_limits.so 的配置文件，而 pam_limits.so 是在 /etc/pam.d/ 中被 login 和 sshd 等多个配置文件声明将要被调用的。</p>
+<p>当用户登录系统时，会使用到某个服务程序（比如ssh、login），服务程序将请求发送到 PAM 模块，PAM 模块根据目录 /etc/pam.d/ 下对应的服务程序配置文件进行处理，处理的过程中会调用 pam_***.so 模块，从而使 limits.conf 配置生效。</p>
+<p>**当系统开机启动时，由于没有 PAM 认证的过程，所以 /etc/security/limits.conf 的配置不会生效。  **</p>
+<h3 id="22-limitsconf-文件格式">2.2 limits.conf 文件格式</h3>
+<pre tabindex="0"><code>username|@groupname type resource limit 
+</code></pre><p>1）username|@groupname 设置需要被限制的用户名，组名前面加 @和用户名区别。也可用通配符 * 来做所有用户的限制
+2）type 类型有 soft，hard 和 -，其中 soft 指的是当前系统生效的设置值。hard 表明系统中所能设定的最大值。soft 的限制不能比 hard 限制高。用 - 就表明同时设置了 soft 和 hard 的值
+3）resource： 表示要限制的资源</p>
+<ul>
+<li>nofile - 打开文件的最大数目</li>
+<li>noproc - 进程的最大数目</li>
+</ul>
+<h3 id="23-ulimit-命令">2.3 ulimit 命令</h3>
+<p>表 1. ulimit 参数说明</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-H</td>
+<td>设置硬资源限制，一旦设置不能增加。</td>
+<td>ulimit – Hs 64；限制硬资源，线程栈大小为 64K。</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>设置软资源限制，设置后可以增加，但是不能超过硬资源设置。</td>
+<td>ulimit – Sn 32；限制软资源，32 个文件描述符。</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>显示当前所有的 limit 信息。</td>
+<td>ulimit – a；显示当前所有的 limit 信息。</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>最大的 core 文件的大小， 以 blocks 为单位。</td>
+<td>ulimit – c unlimited； 对生成的 core 文件的大小不进行限制。</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>进程最大的数据段的大小，以 Kbytes 为单位。</td>
+<td>ulimit -d unlimited；对进程的数据段大小不进行限制。</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>进程可以创建文件的最大值，以 blocks 为单位。</td>
+<td>ulimit – f 2048；限制进程可以创建的最大文件大小为 2048 blocks。</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>最大可加锁内存大小，以 Kbytes 为单位。</td>
+<td>ulimit – l 32；限制最大可加锁内存大小为 32 Kbytes。</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>最大内存大小，以 Kbytes 为单位。</td>
+<td>ulimit – m unlimited；对最大内存不进行限制。</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>可以打开最大文件描述符的数量。</td>
+<td>ulimit – n 128；限制最大可以使用 128 个文件描述符。</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>管道缓冲区的大小，以 Kbytes 为单位。</td>
+<td>ulimit – p 512；限制管道缓冲区的大小为 512 Kbytes。</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>线程栈大小，以 Kbytes 为单位。</td>
+<td>ulimit – s 512；限制线程栈的大小为 512 Kbytes。</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>最大的 CPU 占用时间，以秒为单位。</td>
+<td>ulimit – t unlimited；对最大的 CPU 占用时间不进行限制。</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>用户最大可用的进程数。</td>
+<td>ulimit – u 64；限制用户最多可以使用 64 个进程。</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>进程最大可用的虚拟内存，以 Kbytes 为单位。</td>
+<td>ulimit – v 200000；限制最大可用的虚拟内存为 200000 Kbytes。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24-内核配置文件-etcsysctlconf">2.4 内核配置文件 /etc/sysctl.conf</h3>
+<p>配置文件 /etc/sysctl.conf 用来配置 Linux 系统内核的运行参数。
+sysctl 命令可以在内核运行时动态地修改内核的运行参数，内核的运行参数在目录 /proc/sys 中。它包含一些 TCP/IP 堆栈和虚拟内存系统的高级选项。用 sysctl 可以读取设置超过五百个系统变量。
+使用下面这个命令，可以立即刷新内核的运行参数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sysctl -p 
+</span></span></code></pre></div><h4 id="241-内核配置中与-ulimit-有关的配置">2.4.1 内核配置中与 ulimit 有关的配置</h4>
+<p><strong>fs.file-max</strong>
+表示系统所有进程一共可以打开的文件数量，它是系统级别的，因此应该尽量将它调的大一些。
+内核运行时参数：/proc/sys/fs/file-max</p>
+<p><strong>fs.nr_open</strong>
+表示对单个进程可以打开的文件数量的限制。
+内核运行时参数：/proc/sys/fs/nr_open</p>
+<h4 id="242-etcsysctlconf-与-etcsecuritylimitsconf-的关系">2.4.2 /etc/sysctl.conf 与 /etc/security/limits.conf 的关系</h4>
+<p>内核配置文件 /etc/sysctl.conf 的配置项 fs.nr_open 设定了单个进程能打开的最大文件数量限制。
+ulimit 配置文件 /etc/security/limits.conf 的配置项<code>* hard nofile 65535</code>也设定了单个进程能打开的最大文件数量限制。
+内核配置的优先级最高，当 ulimit 的配置超过内核的配置时，系统会认为配置错误，使单个进程能打开的最大文件数量恢复到 ulimit 的默认值（一般是 1024）。</p>
+<h2 id="三配置文件说明">三、配置文件说明</h2>
+<h3 id="31--配置文件-etcsecuritylimitsconf">3.1  配置文件 /etc/security/limits.conf</h3>
+<pre tabindex="0"><code># /etc/security/limits.conf
+#
+#This file sets the resource limits for the users logged in via PAM.
+# 该文件为通过PAM登录的用户设置资源限制。
+
+#It does not affect resource limits of the system services.
+# 它不影响系统服务的资源限制。
+
+#Also note that configuration files in /etc/security/limits.d directory,
+#which are read in alphabetical order, override the settings in this
+#file in case the domain is the same or more specific.
+# 请注意，在 /etc/security/limits.d 目录下
+# 按照字母顺序排列的配置文件会覆盖 /etc/security/limits.conf 中相同的配置
+
+#That means for example that setting a limit for wildcard domain here
+#can be overriden with a wildcard setting in a config file in the
+#subdirectory, but a user specific setting here can be overriden only
+#with a user specific setting in the subdirectory.
+# 这意味着，例如使用通配符的 domain 会被子目录中相同的通配符配置所覆盖，
+# 但是某一用户的特定配置只能被字母路中用户的配置所覆盖。
+# 其实就是某一用户A如果在/etc/security/limits.conf有配置，
+# 当 /etc/security/limits.d 子目录下配置文件也有用户A的配置时，
+# 那么A中某些配置会被覆盖。最终取的值是 /etc/security/limits.d 下的配置文件的配置。
+
+#Each line describes a limit for a user in the form:
+# 每一行描述一个用户配置
+# &lt;domain&gt; &lt;type&gt; &lt;item&gt; &lt;value&gt;
+
+#Where:
+#&lt;domain&gt; can be:
+# - a user name    一个用户名
+# - a group name, with @group syntax    用户组格式为@GROUP_NAME
+# - the wildcard *, for default entry    默认配置为*，代表所有用户
+# - the wildcard %, can be also used with %group syntax,
+# for maxlogin limit 
+#
+#&lt;type&gt; can have the two values:
+# - &#34;soft&#34; for enforcing the soft limits 
+# - &#34;hard&#34; for enforcing hard limits
+# 有soft，hard 和-，
+# soft 指的是当前系统生效的设置值，软限制也可以理解为警告值。
+# hard 表示系统中所能设定的最大值。soft的限制不能比hard限制高，
+# 用 - 表示同时设置了 soft 和 hard 的值。
+#
+#&lt;item&gt; can be one of the following:    &lt;item&gt;可以使以下选项中的一个
+# - core - limits the core file size (KB)    限制内核文件的大小。
+# - data - max data size (KB)    最大数据大小
+# - fsize - maximum filesize (KB)    最大文件大小
+# - memlock - max locked-in-memory address space (KB)    最大锁定内存地址空间
+# - nofile - max number of open file descriptors 
+# 最大打开的文件数（以文件描述符，file descripter 计数）
+# - rss - max resident set size (KB) 最大持久设置大小
+# - stack - max stack size (KB) 最大栈大小
+# - cpu - max CPU time (MIN)    最多CPU占用时间，单位为MIN分钟
+# - nproc - max number of processes 进程的最大数目
+# - as - address space limit (KB) 地址空间限制 
+# - maxlogins - max number of logins for this user    此用户允许登录的最大数目
+# - maxsyslogins - max number of logins on the system    系统最大同时在线用户数
+# - priority - the priority to run user process with    运行用户进程的优先级
+# - locks - max number of file locks the user can hold    用户可以持有的文件锁的最大数量
+# - sigpending - max number of pending signals
+# - msgqueue - max memory used by POSIX message queues (bytes)
+# - nice - max nice priority allowed to raise to values: [-20, 19] max nice优先级允许提升到值
+# - rtprio - max realtime pr iority
+#
+#&lt;domain&gt; &lt;type&gt; &lt;item&gt; &lt;value&gt;
+#
+
+#* soft core 0
+#* hard rss 10000
+#@student hard nproc 20
+#@faculty soft nproc 20
+#@faculty hard nproc 50
+#ftp hard nproc 0
+#@st
+</code></pre><h3 id="32--配置文件子目录-etcsecuritylimitsd">3.2  配置文件子目录 /etc/security/limits.d</h3>
+<p>在该目录下创建以 .conf 为后缀的配置文件。</p>
+<p>例如，创建一个文件名为<code>/etc/security/limits.d/20-nproc.conf</code>的文件，它内容为：</p>
+<pre tabindex="0"><code># Default limit for number of user&#39;s processes to prevent
+# accidental fork bombs.
+# See rhbz #432903 for reasoning.
+
+*          soft    nproc     4096         # 所有的用户默认可以打开最大的进程数为 4096
+root       soft    nproc     unlimited    # root 用户默认可以打开最大的进程数无限制的。
+</code></pre><h3 id="33--注意事项">3.3  注意事项</h3>
+<p><strong>1、nofile 可以设置的最大值为 1048576 (2</strong>20)，因此也不能设置为 unlimited。**</p>
+<p>如果设置的值大于该数，就会导致 ssh 登录不了，出现下面这个错误：</p>
+<pre tabindex="0"><code>Dec  1 14:57:57 localhost sshd[1543]: pam_limits(sshd:session): Could not set limit for &#39;nofile&#39;: Operation not permitted
+</code></pre><p><strong>2、Linux 系统默认是不产生 core 文件的，要用</strong><code>**ulimit -c unlimited**</code><strong>放开</strong></p>
+<h2 id="四使配置生效的方式">四、使配置生效的方式</h2>
+<h3 id="41--临时生效">4.1  临时生效</h3>
+<p>使用<code>ulimit</code>命令。</p>
+<h3 id="42--永久生效">4.2  永久生效</h3>
+<p>把配置写入配置文件中使配置永久生效。
+重新登录即可生效，不需要重启系统，也可以重新加载 /etc/profile 文件使配置生效。</p>
+<h2 id="五生产环境如何使用">五、生产环境如何使用</h2>
+<p>一般会对所有用户限制文件描述符的数量，由于 Linux 系统默认不产生 core 文件，所以 core 也要配置。
+如果有必要，还可以设置用户可以打开的最大进程数。
+把下列配置写入配置文件，使它永久生效。</p>
+<pre tabindex="0"><code># 限制文件描述符，临时生效命令 ulimit -n 65535
+root soft nofile 65535
+root hard nofile 65535
+* soft nofile 65535
+* hard nofile 65535
+
+# 产生 core 文件，临时生效命令 ulimit -c unlimited
+root soft core unlimited
+root hard core unlimited
+* soft core unlimited
+* hard core unlimited
+</code></pre>
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
